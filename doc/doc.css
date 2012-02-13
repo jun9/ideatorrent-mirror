@@ -1,0 +1,106 @@
+/* Modified version of the bazaar-vcs.org default.css file for doc. */
+body {
+  color: #303030;
+  margin: 50px;
+  font-family: Verdana, Geneva, Arial, sans-serif;
+  font-size: small;
+  line-height: 140%
+  }
+
+
+a:link {
+  color: #4c52ff;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #4c52ff;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #6f0303;
+  text-decoration: none;
+}
+
+h1, h2, h3 {
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+h1.title {
+  text-align: center;
+  color: black;
+  font-size: 2.5em;
+}
+
+
+div.contents p {
+  font-weight: bold;
+}
+
+div.contents p a:hover {
+  color: inherit;
+}
+
+div.note {
+  margin-left: 5em;
+  margin-right: 5em;
+  color: #000000;
+  background-color: #c1d1ff;
+  border: 1px solid #888888;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+div.note .first {
+  font-weight: bold;
+}
+
+h1 {
+  color: #6f0303; 
+  font-size: 1.7em;
+}
+
+h1 a:link,
+h1 a:hover,
+h1 a:visited {
+  color: inherit;
+}
+  
+h2
+{
+  color: black;
+  font-size: 1.3em;
+}
+
+h2,
+h2 a:link,
+h2 a:hover,
+h2 a:visited
+{
+  color:black;
+}
+
+h3 {
+  color: #966b72; 
+}
+
+h3 a:link,
+h3 a:hover,
+h3 a:visited {
+  color: inherit;
+  }
+
+
+.literal-block {
+  margin-left: 5em;
+  margin-right: 5em;
+  color: #000000;
+  font-weight: normal;
+  background-color: #e5ecf9;
+  border: 1px solid #888888;
+  padding: 1em;
+  }
+
+
+

@@ -1,0 +1,1207 @@
+diff -Nurb -x '*~' brownie/choice/edit.php ubuntu_brainstorm/choice/edit.php
+--- brownie/choice/edit.php	2008-09-09 21:29:10.000000000 +0200
++++ ubuntu_brainstorm/choice/edit.php	2008-09-05 23:40:13.000000000 +0200
+@@ -156,6 +156,25 @@
+ <div style="padding-left:5px">
+ 
+ 
++<?php if($data['choice'] == null) : ?>
++
++<table>
++<tr><td>
++<img src="<?php echo "/" . $this->getThemePath(); ?>/images/warning.png" />
++</td><td style="padding-left:10px">
++<span style="font-size:15px; font-weight:bold">
++<?php 
++	echo t('First time you submit an idea? Check the <a href="!link" target="_blank">posting guidelines</a>!', 
++		array("!link" => $basepathnavbar . "faq/#question11"
++		));
++?>
++</span>
++</td></tr>
++</table>
++
++<br />
++
++<?php endif; ?>
+ 
+ 
+ 
+diff -Nurb -x '*~' brownie/choicelist/ideas_in_preparation.php ubuntu_brainstorm/choicelist/ideas_in_preparation.php
+--- brownie/choicelist/ideas_in_preparation.php	2008-09-09 21:29:10.000000000 +0200
++++ ubuntu_brainstorm/choicelist/ideas_in_preparation.php	2008-08-31 20:44:54.000000000 +0200
+@@ -73,7 +73,13 @@
+ 	$description = 
+ 		t('Here are the newly submitted ideas about !project that are awaiting moderator validation before going to the "popular ideas" area.',
+ 			array("!project" => (($GLOBALS['gbl_relation'] != null)?"<b>" . $GLOBALS['gbl_relation']->getData()->name . "</b>":
+-				$this->getThemeSetting("project_name"))));
++				$this->getThemeSetting("project_name")))) .
++		"<br />" . 
++		t("!bopen Learn !linkopen why!linkclose!bclose.",
++			array("!bopen" => "<b>",
++				"!bclose" => "</b>",
++				"!linkopen" => '<a href="' . $parentpath . 'faq/#question14">',
++				"!linkclose" => "</a>"));
+ }
+ else if($models["choicelist"]->_filter_array["state_not_an_idea"] != 0)
+ {
+diff -Nurb -x '*~' brownie/choicelist/popular_ideas.php ubuntu_brainstorm/choicelist/popular_ideas.php
+--- brownie/choicelist/popular_ideas.php	2008-09-09 21:29:10.000000000 +0200
++++ ubuntu_brainstorm/choicelist/popular_ideas.php	2008-08-26 14:38:47.000000000 +0200
+@@ -75,7 +75,12 @@
+ 		$description =
+ 			t("Here are this month's most popular ideas about !project. ",
+ 				array("!project" => (($GLOBALS['gbl_relation'] != null)?"<b>" . $GLOBALS['gbl_relation']->getData()->name . "</b>":
+-					$this->getThemeSetting("project_name"))));
++					$this->getThemeSetting("project_name"))))
++			. t("!bopen New to Brainstorm? !bclose Learn !linkopen how it works!linkclose!" ,
++				array( "!bopen" => "<b>",
++					"!bclose" => "</b>",
++					"!linkopen" => "<a href=\"" . $basepath . "tour/\">",
++					"!linkclose" => "</a>"));
+ 	break;
+ 
+ 	case "mosthype-6-months":
+diff -Nurb -x '*~' brownie/common/ideastatusbar.php ubuntu_brainstorm/common/ideastatusbar.php
+--- brownie/common/ideastatusbar.php	2008-09-09 21:29:10.000000000 +0200
++++ ubuntu_brainstorm/common/ideastatusbar.php	2008-08-27 12:42:40.000000000 +0200
+@@ -53,10 +53,16 @@
+ 
+ 			<?php echo t('This idea was marked as needing a more complete blueprint the !date.', 
+ 				array("!date" => date('j F y',strtotime($data["choice"]->last_status_change)))); ?>
++			</span><span class="tipslinks">
++			<?php echo t('(<a href="!link">What is a blueprint?</a>)', 
++				array("!link" => "javascript:tooltip_popup('" . $GLOBALS['basemodule_url'] . "/tooltip/2/');")); ?>
+ 
+ 		<?php else : ?>
+ 
+ 			<?php echo t('This idea is marked as needing a more complete blueprint.'); ?>
++			</span><span class="tipslinks">
++			<?php echo t('(<a href="!link">What is a blueprint?</a>)', 
++				array("!link" => "javascript:tooltip_popup('" . $GLOBALS['basemodule_url'] . "/tooltip/2/');")); ?>
+ 
+ 		<?php endif; ?>
+ 
+@@ -127,10 +133,16 @@
+ 
+ 			<?php echo t('This idea was marked as having a complete blueprint the !date.', 
+ 				array("!date" => date('j F y',strtotime($data["choice"]->last_status_change)))); ?>
++			</span><span class="tipslinks">
++			<?php echo t('(<a href="!link">What is a blueprint?</a>)', 
++				array("!link" => "javascript:tooltip_popup('" . $GLOBALS['basemodule_url'] . "/tooltip/2/');")); ?>
+ 
+ 		<?php else : ?>
+ 
+ 			<?php echo t('This idea is marked as having a complete blueprint.'); ?>
++			</span><span class="tipslinks">
++			<?php echo t('(<a href="!link">What is a blueprint?</a>)', 
++				array("!link" => "javascript:tooltip_popup('" . $GLOBALS['basemodule_url'] . "/tooltip/2/');")); ?>
+ 
+ 		<?php endif; ?>
+ 	<?php endif; ?>
+@@ -139,10 +151,14 @@
+ 
+ 			<?php echo t('This entry was marked as not being an idea the !date.', 
+ 				array("!date" => date('j F y',strtotime($data["choice"]->last_status_change)))); ?>
++			<?php echo t('If this is a bug report, please use <a href="!link">the Ubuntu bug tracker</a>.', 
++				array("!link" => "https://bugs.launchpad.net/ubuntu/+filebug")); ?>
+ 
+ 		<?php else : ?>
+ 
+ 			<?php echo t('This entry is marked as not being an idea.'); ?>
++			<?php echo t('If this is a bug report, please use <a href="!link">the Ubuntu bug tracker</a>.', 
++				array("!link" => "https://bugs.launchpad.net/ubuntu/+filebug")); ?>
+ 
+ 		<?php endif; ?>
+ 	<?php endif; ?>
+diff -Nurb -x '*~' brownie/css/qapoll.css ubuntu_brainstorm/css/qapoll.css
+--- brownie/css/qapoll.css	2008-09-09 21:29:10.000000000 +0200
++++ ubuntu_brainstorm/css/qapoll.css	2008-09-06 17:35:31.000000000 +0200
+@@ -530,7 +530,7 @@
+ 	position:relative;
+ 	width:198px;
+ 	border:2px solid #CCC1A3;
+-	background-image:url(/modules/ideatorrent/themes/brownie/images/dropdownicon-whitebg.png);
++	background-image:url(/modules/ideatorrent/themes/ubuntu_brainstorm/images/dropdownicon-whitebg.png);
+ 	background-repeat:no-repeat;
+ 	background-position:100%;
+ }
+@@ -671,19 +671,19 @@
+ ul#maindropdown-1 li.maindropdown-1drop a i,
+ ul#maindropdown-1 li.maindropdown-1drop-disabled a i
+ {
+-	background: url(/modules/ideatorrent/themes/brownie/images/maindropdownright.png) 100% 50% no-repeat;
++	background: url(/modules/ideatorrent/themes/ubuntu_brainstorm/images/maindropdownright.png) 100% 50% no-repeat;
+ 	width: 15px;
+ }
+ 
+ ul#maindropdown-1 li.maindropdown-1nodrop a i
+ {
+-	background: url(/modules/ideatorrent/themes/brownie/images/maindropdownrightnoarrow.png) 100% 50% no-repeat;
++	background: url(/modules/ideatorrent/themes/ubuntu_brainstorm/images/maindropdownrightnoarrow.png) 100% 50% no-repeat;
+ 	width: 5px;
+ }
+ 
+ ul#maindropdown-1 li a
+ {
+-	background: url(/modules/ideatorrent/themes/brownie/images/maindropdownleft.png) 0% 50% no-repeat;
++	background: url(/modules/ideatorrent/themes/ubuntu_brainstorm/images/maindropdownleft.png) 0% 50% no-repeat;
+ 	color: #5a3320;
+ 	display: block;
+ 	float: left;
+@@ -699,14 +699,14 @@
+ ul#maindropdown-1 li.maindropdown-1drop-disabled.selected a i,
+ ul#maindropdown-1 li.maindropdown-1drop-disabled:hover i
+ {	
+-	background: url(/modules/ideatorrent/themes/brownie/images/maindropdownrightselect.png) 100% 50% no-repeat;
++	background: url(/modules/ideatorrent/themes/ubuntu_brainstorm/images/maindropdownrightselect.png) 100% 50% no-repeat;
+ }
+ 
+ ul#maindropdown-1 li.maindropdown-1nodrop a:hover i,
+ ul#maindropdown-1 li.maindropdown-1nodrop.selected a i
+ {	
+ 
+-	background: #e8dfc5 url(/modules/ideatorrent/themes/brownie/images/maindropdownrightnoarrow.png) 100% 50% no-repeat;
++	background: #e8dfc5 url(/modules/ideatorrent/themes/ubuntu_brainstorm/images/maindropdownrightnoarrow.png) 100% 50% no-repeat;
+ }
+ 
+ 
+diff -Nurb -x '*~' brownie/faq/faq.php ubuntu_brainstorm/faq/faq.php
+--- brownie/faq/faq.php	2008-09-09 21:29:10.000000000 +0200
++++ ubuntu_brainstorm/faq/faq.php	2008-09-06 22:33:05.000000000 +0200
+@@ -85,10 +85,20 @@
+ 
+ 
+ <?php if($options["page_number"] > 0 && $options["page_number"] < 4) : ?>
+-
+ <!--
+-
+-//Edit your FAQ
++<?php
++	//We prepare the tabbed menu.
++	$menu = array();
++
++	$menu["Submitting your idea"] = $basepath_plus_subtabpath;
++	$menu["Moderation"] = $basepath_plus_subtabpath . "2/";
++	$menu["Implemented ideas"] = $basepath_plus_subtabpath . "3/";
++
++	$tabmenu_data["entries"] = $menu;
++	$tabmenu_data["selected_entry"] = $options["page_number"] - 1;
++	echo $this->loadTemplate("common/", "tabbedmenu", "", $tabmenu_data);
++?>
++-->
+ 
+ <ul>
+ <li class="faq"> Ubuntu Brainstorm
+@@ -96,7 +106,7 @@
+ <ol>
+ <li class="faq2"><a href="#question1">What is Ubuntu Brainstorm?</a></li>
+ <li class="faq2"><a href="#question2">How does it work?</a></li>
+-<li class="faq2"><a href="#question4">What is the "Ideas in quarantine" area?</a></li>
++<li class="faq2"><a href="#question4">What is the "Idea sandbox" area?</a></li>
+ <li class="faq2"><a href="#question5">What is the "Popular ideas" area?</a></li>
+ <li class="faq2"><a href="#question6">What is the "Ideas in development" area?</a></li>
+ <li class="faq2"><a href="#question7">What is the "Implemented ideas" area?</a></li>
+@@ -109,9 +119,9 @@
+ <li class="faq2"><a href="#question11">What are the idea posting guidelines?</a></li>
+ <li class="faq2"><a href="#question12">I have a package request. Is Ubuntu Brainstorm the right place?</a></li>
+ <li class="faq2"><a href="#question13">I want to report something that is not working as expected. Is Ubuntu Brainstorm the right place?</a></li>
+-<li class="faq2"><a href="#question14">I submitted my idea, and it went into the "Ideas in quarantine" area. Why?</a></li>
+-<li class="faq2"><a href="#question15">How does the ideas in quarantine go to the "popular ideas" area?</a></li>
+-<li class="faq2"><a href="#question16">My idea dissapeared from the "quarantine" area. How do I know where it went?</a></li>
++<li class="faq2"><a href="#question14">I submitted my idea, and it went into the "Idea sandbox" area. Why?</a></li>
++<li class="faq2"><a href="#question15">How does the ideas in the Idea sandbox go to the "popular ideas" area?</a></li>
++<li class="faq2"><a href="#question16">My idea dissapeared from the Idea sandbox area. How do I know where it went?</a></li>
+ <li class="faq2"><a href="#question17">My idea was marked as "Not an idea". Why?</a></li>
+ <li class="faq2"><a href="#question18">My idea was marked as "Already implemented". Why?</a></li>
+ <li class="faq2"><a href="#question19">My idea was marked as "Duplicate". Why?</a></li>
+@@ -138,12 +148,14 @@
+ </li>
+ 
+ 
+-<li class="faq"> Notifying moderators about spam/irrelevance/ideas already implemented
++<li class="faq"> Getting in touch with moderators
+ <br />
+ <ol>
+ <li class="faq2"><a href="#question41">How do I report already implemented ideas?</a></li>
+ <li class="faq2"><a href="#question42">How do I report an offensive or irrelevant solution?</a></li>
+ <li class="faq2"><a href="#question43">How do I report an offensive or spam comment?</a></li>
++<li class="faq2"><a href="#question44">I want to contact moderators directly. Where do I go?</a></li>
++<li class="faq2"><a href="#question45">I want to become an Ubuntu Brainstorm moderator! What are the steps?</a></li>
+ </ol>
+ </li>
+ 
+@@ -161,6 +173,7 @@
+ <br />
+ <ol>
+ <li class="faq2"><a href="#question61">I'm a project developer and I want to add my project and/or set custom categories. How do I do that?</a></li>
++<li class="faq2"><a href="#question63">I'm a project developer and I want to interact with my project's ideas. How do I do that?</a></li>
+ <li class="faq2"><a href="#question62">I want to fetch data from Ubuntu Brainstom. How do I do that?</a></li>
+ </ol>
+ </li>
+@@ -186,7 +199,7 @@
+ An idea is the combinaison of a rationale (the raison d'être of the idea) and a solution (the proposed way to solve the problem). Users can either post brand new ideas, or propose solutions to existing idea rationales. Solutions can then be evaluated by everyone by voting for or against them, and the most popular ones get reviewed by Ubuntu developers.
+ </div>
+ </li>
+-<li class="faqanswer2"><a name="question4"></a>What is the "Ideas in quarantine" area?
++<li class="faqanswer2"><a name="question4"></a>What is the "Idea sandbox" area?
+ <div class="faqanswer2item">
+ This area contains all the ideas that were marked by moderators as not following the guidelines, plus the newly submitted ideas that are awaiting moderator approval before going to the "popular ideas" area.
+ </div>
+@@ -247,19 +260,19 @@
+ What you are describing is a bug. Brainstorm is <b>not</b> the right place. You should file a bug report on <a href="https://launchpad.net/ubuntu/+filebug">Launchpad</a>, the Ubuntu bug tracker.
+ </div>
+ </li>
+-<li class="faqanswer2"><a name="question14"></a>I submitted my idea, and it went into the "Ideas in quarantine" area. Why?
++<li class="faqanswer2"><a name="question14"></a>I submitted my idea, and it went into the "Idea sandbox" area. Why?
+ <div class="faqanswer2item">
+ Newly submitted ideas will need moderator approvals before joining the "popular ideas" area. Indeed, our experience with the first 6 months of Ubuntu  Brainstorm showed that often new ideas does not follow the basic <a href="#question11">posting guidelines</a>: lots of bugs and duplicates used to be submitted.
+ <br />
+ So basically, if your idea follow these guidelines, it will be accepted right away.
+ </div>
+ </li>
+-<li class="faqanswer2"><a name="question15"></a>How does the ideas in quarantine go to the "popular ideas" area?
++<li class="faqanswer2"><a name="question15"></a>How does the ideas in the Idea sandbox go to the "popular ideas" area?
+ <div class="faqanswer2item">
+ A given number of moderator approvals is required. You can see the number of approval your idea got in the top right corner box.
+ </div>
+ </li>
+-<li class="faqanswer2"><a name="question16"></a>My idea dissapeared from the "quarantine" area. How do I know where it went?
++<li class="faqanswer2"><a name="question16"></a>My idea dissapeared from the "Idea sandbox" area. How do I know where it went?
+ <div class="faqanswer2item">
+ The simplest way is to go to the "your ideas" section of your dashboard, and to look at the new status of your idea. If the status is "new", then it reached the "popular ideas" area : you should see it in the <a href="<?php echo $GLOBALS['basemodule_url']; ?>/latest_ideas/">latest popular ideas</a> list.
+ </div>
+@@ -331,7 +344,7 @@
+ </li>
+ 
+ 
+-<li class="faqanswer"> Notifying moderators about spam/irrelevance/ideas already implemented
++<li class="faqanswer"> Getting in touch with moderators
+ <br />
+ <ol>
+ <li class="faqanswer2"><a name="question41"></a>How do I report already implemented ideas?
+@@ -349,6 +362,18 @@
+ You shall find report links on the top right corner of comments. Please note that you need to be logged in.
+ </div>
+ </li>
++<li class="faqanswer2"><a name="question44"></a>I want to contact moderators directly. Where do I go?
++<div class="faqanswer2item">
++You shall find a page linked at the bottom of the page called <a href="https://launchpad.net/~brainstorm-moderators">"Contact the moderators"</a>, which will help you getting in touch with the moderators. More specifically, you will be able to contact them either by the mailing list located <a href="https://launchpad.net/~brainstorm-moderators">here</a>, or on IRC at #ubuntu-brainstorm on irc.freenode.net.
++</div>
++</li>
++<li class="faqanswer2"><a name="question45"></a>I want to become an Ubuntu Brainstorm moderator! What are the steps?
++<div class="faqanswer2item">
++Great! Ubuntu Brainstorm is always looking for new moderators. Please introduce yourself on the <a href="https://launchpad.net/~brainstorm-moderators">team mailing list</a>, and explain what makes you want to become a moderator. Include any previous moderation experience. Your application will then be reviewed.
++</div>
++</li>
++
++
+ </ol>
+ </li>
+ 
+@@ -387,6 +412,11 @@
+ No problem! Submit your request on the mailing list <a href="https://launchpad.net/~brainstorm-moderators">here</a>.
+ </div>
+ </li>
++<li class="faqanswer2"><a name="question63"></a>I'm a project developer and I want to interact with my project's ideas. How do I do that?
++<div class="faqanswer2item">
++You can ask to have moderator and developer permissions over your ideas (you will be able to change an idea status, to set a developer comment, ...) Please submit your request on the mailing list <a href="https://launchpad.net/~brainstorm-moderators">here</a>. Note that later on, it will be possible for you to manage people having rights over ideas concerning your project.
++</div>
++</li>
+ <li class="faqanswer2"><a name="question62"></a>I want to fetch data from Ubuntu Brainstom. How do I do that?
+ <div class="faqanswer2item">
+ XML sources of all categories and projects are available. Just happen "/xml" on the project URL. For example, if you want to get the XML data of the Amarok ideas, fetch the XML from <a href="<?php echo $GLOBALS['basemodule_url']; ?>/amarok/xml"><?php echo $GLOBALS['basemodule_url']; ?>/amarok/xml</a>.
+@@ -395,7 +425,7 @@
+ </ol>
+ </li>
+ 
+--->
++
+ 
+ 
+ <?php endif; ?>
+diff -Nurb -x '*~' brownie/static_tooltips_pages/1.php ubuntu_brainstorm/static_tooltips_pages/1.php
+--- brownie/static_tooltips_pages/1.php	2008-09-09 21:29:10.000000000 +0200
++++ ubuntu_brainstorm/static_tooltips_pages/1.php	2008-08-25 15:57:16.000000000 +0200
+@@ -28,8 +28,16 @@
+ </style>
+ </head>
+ <body id="bodyinner">
++<h1>Bug report number</h1>
+ 
+-<!-- Your tooltip -->
++Ubuntu bug reports are located at a place called Launchpad.<br />
++<ul>
++<li>If you want to make a search on the bug reports, <a href="https://bugs.launchpad.net/ubuntu/" target="_blank">please follow this link</a>. </li>
++<li>If you want to submit a new bug report, <a href="https://bugs.launchpad.net/ubuntu/+filebug" target="_blank">please follow this link</a>. </li>
++</ul>
++Once you have found or submitted your bug report, its number can be found above the title.<br />
++<br />
++<img src="/modules/qapoll/static_tooltips_pages/imgs/bug number.png" />
+ 
+ </body>
+ </html>
+diff -Nurb -x '*~' brownie/static_tooltips_pages/2.php ubuntu_brainstorm/static_tooltips_pages/2.php
+--- brownie/static_tooltips_pages/2.php	2008-09-09 21:29:10.000000000 +0200
++++ ubuntu_brainstorm/static_tooltips_pages/2.php	2008-08-25 15:57:16.000000000 +0200
+@@ -28,8 +28,15 @@
+ </style>
+ </head>
+ <body id="bodyinner">
++<h1>Ubuntu blueprints</h1>
+ 
+-<!-- Your tooltip -->
++<p>A blueprint is a document that <b>you</b> can write and that describe a feature, and how to implement it. We can compare a blueprint to an idea, but with concrete technical directions on how to make it work.</p>
++<p>Mature blueprints are chosen and then discussed at the Ubuntu Developer Conferences just after a Ubuntu release, to decide what to do for the next release. For example, here is <a href="https://blueprints.launchpad.net/ubuntu/gutsy" target="_blank">the list of the blueprints</a> that have been targeted for the gutsy 7.10 release. 
++</p>
++<ul>
++<li>To search in the existing blueprints, <a href="https://blueprints.launchpad.net/ubuntu/" target="_blank">please follow this link</a>.</li>
++<li>To create a new blueprint, <a href="https://blueprints.launchpad.net/ubuntu/+addspec" target="_blank">please follow this link</a>.</li>
++</ul>
+ 
+ </body>
+ </html>
+diff -Nurb -x '*~' brownie/static_tooltips_pages/3.php ubuntu_brainstorm/static_tooltips_pages/3.php
+--- brownie/static_tooltips_pages/3.php	2008-09-09 21:29:10.000000000 +0200
++++ ubuntu_brainstorm/static_tooltips_pages/3.php	2008-08-25 15:57:16.000000000 +0200
+@@ -28,8 +28,12 @@
+ </style>
+ </head>
+ <body id="bodyinner">
++<h1>Idea number</h1>
+ 
+-<!-- Your tooltip -->
++You can find the number of an idea at the left of its title in the idea page.
++<br />
++<br />
++<img src="/modules/qapoll/static_tooltips_pages/imgs/idea_number.png" />
+ 
+ </body>
+ </html>
+diff -Nurb -x '*~' brownie/theme.php ubuntu_brainstorm/theme.php
+--- brownie/theme.php	2008-09-09 21:29:10.000000000 +0200
++++ ubuntu_brainstorm/theme.php	2008-08-29 11:47:13.000000000 +0200
+@@ -31,7 +31,7 @@
+  *		)
+  * 	)
+  */
+-function qapoll_brownie_get_theme_options()
++function qapoll_ubuntu_brainstorm_get_theme_options()
+ {
+ 	return array(
+ 		"project_name" => array(
+@@ -58,6 +58,12 @@
+ 			"name" => t("Max visible lines of solutions"),
+ 			"description" => t("The max number of lines of a solution to be shown by default. The rest can be seen by clicking an expand link.")
+ 			),
++		"show_choice_attachments" => array(
++			"type" => "integer",
++			"default_value" => "0",
++			"name" => t("Attach Ubuntu-specific attachments"),
++			"description" => t("Allow or not users to attach Launchpad blueprints and Ubuntuforums.org thread.")
++			),
+ 		"submit_idea_first_part_description" => array(
+ 			"type" => "bigstring",
+ 			"default_value" => t('<div style="font-size:1.6em; text-align:center">
+@@ -86,7 +92,7 @@
+  * the subdirectory and the template called.
+  * The system path of the theme.
+  */
+-function qapoll_brownie_load_external_files($subdir, $template, $theme_path)
++function qapoll_ubuntu_brainstorm_load_external_files($subdir, $template, $theme_path)
+ {
+ 	//List of strings to have translated for the javascript files.
+ 	$translated_strings = array();
+diff -Nurb -x '*~' brownie/tour/tour.php ubuntu_brainstorm/tour/tour.php
+--- brownie/tour/tour.php	2008-09-09 21:30:27.000000000 +0200
++++ ubuntu_brainstorm/tour/tour.php	2008-09-07 13:29:21.000000000 +0200
+@@ -36,7 +36,373 @@
+ 
+ <?php if($this->view_options['page_number'] > 0 && $this->view_options['page_number'] < 6) : ?>
+ 
+-Your tour here!
++
++<div align="center">
++
++	<table style="text-align:center">
++	<tr>
++	<td style="padding-bottom:0px">
++
++	<?php if($this->view_options['page_number'] == 1) : ?>
++	<b class="ubuntu_roundnavbar">
++	<b class="ubuntu_roundnavbar1"><b></b></b>
++	<b class="ubuntu_roundnavbar2"><b></b></b>
++	<b class="ubuntu_roundnavbar3"></b>
++	<b class="ubuntu_roundnavbar4"></b>
++	<b class="ubuntu_roundnavbar5"></b></b> 
++	<?php endif; ?>
++
++	</td>
++	<td>
++	</td>
++	<td style="padding-bottom:0px">
++
++	<?php if($this->view_options['page_number'] == 2) : ?>
++	<b class="ubuntu_roundnavbar">
++	<b class="ubuntu_roundnavbar1"><b></b></b>
++	<b class="ubuntu_roundnavbar2"><b></b></b>
++	<b class="ubuntu_roundnavbar3"></b>
++	<b class="ubuntu_roundnavbar4"></b>
++	<b class="ubuntu_roundnavbar5"></b></b> 
++	<?php endif; ?>
++
++	</td>
++	<td>
++	</td>
++	<td style="padding-bottom:0px">
++
++	<?php if($this->view_options['page_number'] == 3) : ?>
++	<b class="ubuntu_roundnavbar">
++	<b class="ubuntu_roundnavbar1"><b></b></b>
++	<b class="ubuntu_roundnavbar2"><b></b></b>
++	<b class="ubuntu_roundnavbar3"></b>
++	<b class="ubuntu_roundnavbar4"></b>
++	<b class="ubuntu_roundnavbar5"></b></b> 
++	<?php endif; ?>
++
++	</td>
++	<td>
++	</td>
++	<td style="padding-bottom:0px">
++
++	<?php if($this->view_options['page_number'] == 4) : ?>
++	<b class="ubuntu_roundnavbar">
++	<b class="ubuntu_roundnavbar1"><b></b></b>
++	<b class="ubuntu_roundnavbar2"><b></b></b>
++	<b class="ubuntu_roundnavbar3"></b>
++	<b class="ubuntu_roundnavbar4"></b>
++	<b class="ubuntu_roundnavbar5"></b></b> 
++	<?php endif; ?>
++
++	</td>
++	<td>
++	</td>
++	<td style="padding-bottom:0px">
++
++	<?php if($this->view_options['page_number'] == 5) : ?>
++	<b class="ubuntu_roundnavbar">
++	<b class="ubuntu_roundnavbar1"><b></b></b>
++	<b class="ubuntu_roundnavbar2"><b></b></b>
++	<b class="ubuntu_roundnavbar3"></b>
++	<b class="ubuntu_roundnavbar4"></b>
++	<b class="ubuntu_roundnavbar5"></b></b> 
++	<?php endif; ?>
++
++	</td>
++
++	</tr><tr>
++
++	<td <?php echo (($this->view_options['page_number'] == 1)?"class=\"ubuntu_roundnavbar_main\"":""); ?> style="width:100px; vertical-align:bottom; padding-bottom:4px"> 
++	<a href="<?php echo $basepath; ?>tour/1">
++	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-post.png" />
++	</a>
++	</td>
++
++	<td style="padding-left:15px; padding-right:15px">
++	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-arrow.png" />
++	</td>
++
++	<td <?php echo (($this->view_options['page_number'] == 2)?"class=\"ubuntu_roundnavbar_main\"":""); ?> style="width:100px; vertical-align:bottom; padding-bottom:4px">
++	<a href="<?php echo $basepath; ?>tour/2">
++	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-vote.png" />
++	</a>
++	</td>
++
++	<td style="padding-left:15px; padding-right:15px">
++	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-arrow.png" />
++	</td>
++
++	<td <?php echo (($this->view_options['page_number'] == 3)?"class=\"ubuntu_roundnavbar_main\"":""); ?> style="width:100px; vertical-align:bottom; padding-bottom:4px">
++	<a href="<?php echo $basepath; ?>tour/3">
++	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-discuss.png" />
++	</a>
++	</td>
++
++	<td style="padding-left:15px; padding-right:15px">
++	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-arrow.png" />
++	</td>
++
++	<td <?php echo (($this->view_options['page_number'] == 4)?"class=\"ubuntu_roundnavbar_main\"":""); ?> style="width:100px; vertical-align:bottom; padding-bottom:4px">
++	<a href="<?php echo $basepath; ?>tour/4">
++	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-see.png" />
++	</a>
++	</td>
++
++	<td style="padding-left:15px; padding-right:15px">
++	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-arrow.png" />
++	</td>
++
++	<td <?php echo (($this->view_options['page_number'] == 5)?"class=\"ubuntu_roundnavbar_main\"":""); ?> style="width:100px; vertical-align:bottom">
++	<a href="<?php echo $basepath; ?>tour/5">
++	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-participate.png" />
++	</a>
++	</td>
++
++
++	</tr>
++	<tr>
++
++	<td style="padding-top:0px">
++
++	<?php if($this->view_options['page_number'] == 1) : ?>
++	<b class="ubuntu_roundnavbar">
++	<b class="ubuntu_roundnavbar5"></b>
++	<b class="ubuntu_roundnavbar4"></b>
++	<b class="ubuntu_roundnavbar3"></b>
++	<b class="ubuntu_roundnavbar2"><b></b></b>
++	<b class="ubuntu_roundnavbar1"><b></b></b></b>
++	<?php endif; ?>
++
++	</td>
++	<td>
++	</td>
++	<td style="padding-top:0px">
++
++	<?php if($this->view_options['page_number'] == 2) : ?>
++	<b class="ubuntu_roundnavbar">
++	<b class="ubuntu_roundnavbar5"></b>
++	<b class="ubuntu_roundnavbar4"></b>
++	<b class="ubuntu_roundnavbar3"></b>
++	<b class="ubuntu_roundnavbar2"><b></b></b>
++	<b class="ubuntu_roundnavbar1"><b></b></b></b>
++	<?php endif; ?>
++
++	</td>
++	<td>
++	</td>
++	<td style="padding-top:0px">
++
++	<?php if($this->view_options['page_number'] == 3) : ?>
++	<b class="ubuntu_roundnavbar">
++	<b class="ubuntu_roundnavbar5"></b>
++	<b class="ubuntu_roundnavbar4"></b>
++	<b class="ubuntu_roundnavbar3"></b>
++	<b class="ubuntu_roundnavbar2"><b></b></b>
++	<b class="ubuntu_roundnavbar1"><b></b></b></b>
++	<?php endif; ?>
++
++	</td>
++	<td>
++	</td>
++	<td style="padding-top:0px">
++
++	<?php if($this->view_options['page_number'] == 4) : ?>
++	<b class="ubuntu_roundnavbar">
++	<b class="ubuntu_roundnavbar5"></b>
++	<b class="ubuntu_roundnavbar4"></b>
++	<b class="ubuntu_roundnavbar3"></b>
++	<b class="ubuntu_roundnavbar2"><b></b></b>
++	<b class="ubuntu_roundnavbar1"><b></b></b></b>
++	<?php endif; ?>
++
++	</td>
++	<td>
++	</td>
++	<td style="padding-top:0px">
++
++	<?php if($this->view_options['page_number'] == 5) : ?>
++	<b class="ubuntu_roundnavbar">
++	<b class="ubuntu_roundnavbar5"></b>
++	<b class="ubuntu_roundnavbar4"></b>
++	<b class="ubuntu_roundnavbar3"></b>
++	<b class="ubuntu_roundnavbar2"><b></b></b>
++	<b class="ubuntu_roundnavbar1"><b></b></b></b>
++	<?php endif; ?>
++
++	</td>
++	</tr>
++
++	</table>
++
++</div>
++
++<br />
++
++
++<table style="width:100%">
++<tr>
++<td style="padding-left:30px; padding-right:30px; vertical-align:top" rowspan="2">
++
++<div style="border: 1px solid grey; padding:3px">
++<div style="background-image:url(<?php echo "/" . $this->getThemePath(); ?>/images/tour-screen-<?php echo $this->view_options['page_number']; ?>.png); background-repeat:no-repeat; width:100%; height:295px">
++
++</div>
++</div>
++
++
++</td>
++<td style="width:370px; vertical-align:top; padding-right:30px">
++
++
++<?php if($this->view_options['page_number'] == 1) : ?>
++<h2 style="margin-top:0px">
++Post your idea for Ubuntu
++</h2>
++
++<p>
++Ubuntu Brainstorm is a place for people to post their ideas about Ubuntu. They can be promoted/demoted, and the most popular are reviewed by the Ubuntu developers.
++</p>
++
++<p>
++So got a great idea for Ubuntu? <a href="<?php echo $basepath; ?>submit/" target="_blank">Post it on Ubuntu Brainstorm!</a>
++</p>
++
++
++<br />
++<br />
++
++<?php elseif($this->view_options['page_number'] == 2) : ?>
++<h2 style="margin-top:0px">
++Vote for the ideas you like
++</h2>
++
++<p>
++Show your support for the best ideas: promote or demote them by clicking on the green and red arrows!
++</p>
++
++<p>
++By voting in Ubuntu Brainstorm, you show your support for what you feel is important to Ubuntu. With enough support ideas can an impact on the future of Ubuntu.
++</p>
++
++<p>
++Check back regularly for new ideas and don't miss the most popular ones!
++</p>
++
++<br />
++<br />
++
++<?php elseif($this->view_options['page_number'] == 3) : ?>
++
++<h2 style="margin-top:0px">
++Discuss with the community
++</h2>
++
++<p>
++Brainstorm better ideas! Leave constructive comments, links to relevant ubuntuforums.org threads, and if you have the necessary skills, start writing a blueprint. (<a href="https://wiki.ubuntu.com/FeatureSpecifications" target="_blank">What is a blueprint?</a>)
++</p>
++
++<br />
++<br />
++
++<?php elseif($this->view_options['page_number'] == 4) : ?>
++
++<h2 style="margin-top:0px">
++See what's going on
++</h2>
++
++<p>
++Ubuntu Brainstorm is read regularly by Ubuntu developers and contributors. They are doing their best to keep you up-to-date on the most popular ideas. To see what's going on, keep an eye on:
++</p>
++
++<ul>
++<li>
++The <a href="<?php echo $basepath; ?>ideas_in_development/" target="_blank">ideas in development</a> and <a href="<?php echo $basepath; ?>implemented_ideas/" target="_blank">implemented ideas</a> pages in Ubuntu Brainstorm.
++</li>
++<li>
++The <a href="http://blog.qa.ubuntu.com/" target="_blank">Ubuntu QA blog</a>, where developers' comments on ideas and Brainstorm news are regularly posted.
++</li>
++<li>
++<a href="http://planet.ubuntu.com/" target="_blank">Planet Ubuntu</a> where all the Ubuntu developer's blogs are aggregated.
++</li>
++<li>
++The <a href="http://fridge.ubuntu.com/" target="_blank">Ubuntu "Fridge"</a> where regular Ubuntu news are posted.
++</li>
++</ul>
++<br />
++
++<?php elseif($this->view_options['page_number'] == 5) : ?>
++
++<h2 style="margin-top:0px">
++Participate to the development of ideas
++</h2>
++
++<p>
++There are plenty of great ideas out there, but not enough contributors to implement them. Your participation can make the difference!
++</p>
++
++<p>
++If you are willing to start working on an idea, don't hesitate, just do it! Make contact with the relevant <a href="http://www.ubuntu.com/community/participate" target="_blank">Ubuntu team</a>. Discuss how to approach the project, and get started!
++</p>
++
++<p>
++Not a programmer? No problem! Lots of tasks do not require programming knowledge, for example <a href="https://wiki.ubuntu.com/TranslatingUbuntu" target="_blank">translation</a>, <a href="https://wiki.ubuntu.com/DocumentationTeam" target="_blank">documentation</a>, <a href="https://wiki.ubuntu.com/Artwork" target="_blank">artwork</a>, <a href="https://wiki.ubuntu.com/HelpingWithBugs" target="_blank">bug triaging</a>, ...
++<a href="http://www.ubuntu.com/community/participate" target="_blank">Find out more</a> about contributing to Ubuntu and working with Ubuntu teams.
++</p>
++
++<br />
++
++<?php endif; ?>
++
++
++
++
++</td>
++</tr>
++
++
++<tr>
++<td style="vertical-align:bottom">
++
++<table style="width:100%">
++<tr>
++<td>
++</td>
++<td style="width:1%">
++
++	<b class="postbutton">
++	<b class="postbutton1"><b></b></b>
++	<b class="postbutton2"><b></b></b>
++	<b class="postbutton3"></b>
++	<b class="postbutton4"></b>
++	<b class="postbutton5"></b></b>
++	<div class="postbutton_main" style="padding-left:15px; padding-right:15px">
++
++	<?php if($this->view_options['page_number'] < 5) : ?>
++	<a href="<?php echo $basepath; ?>tour/<?php echo $this->view_options['page_number'] + 1; ?>" class="blacklink2" style="font-size:17px; padding-left:2px; white-space:nowrap">
++	Next &raquo;
++	</a>
++	<?php else : ?>
++	<a href="<?php echo $GLOBALS['basemodule_url']; ?>/user/register" class="blacklink2" style="font-size:17px; padding-left:2px; white-space:nowrap">
++	Join Ubuntu Brainstorm Now!
++	</a>
++	<?php endif; ?>
++
++	</div>
++	<b class="postbutton">
++	<b class="postbutton5"></b>
++	<b class="postbutton4"></b>
++	<b class="postbutton3"></b>
++	<b class="postbutton2"><b></b></b>
++	<b class="postbutton1"><b></b></b></b>
++
++</td>
++</tr>
++</table>
++
++</td>
++</tr>
++</table>
++
+ 
+ <?php endif; ?>
+ 
+diff -Nurb -x '*~' brownie/tour/tour.php.orig ubuntu_brainstorm/tour/tour.php.orig
+--- brownie/tour/tour.php.orig	2008-09-07 13:29:21.000000000 +0200
++++ ubuntu_brainstorm/tour/tour.php.orig	1970-01-01 01:00:00.000000000 +0100
+@@ -1,411 +0,0 @@
+-<?php
+-
+-/*
+-Copyright (C) 2008 Nicolas Deschildre <ndeschildre@gmail.com>
+-
+-This program is free software; you can redistribute it and/or
+-modify it under the terms of the GNU General Public License
+-as published by the Free Software Foundation; either version 2
+-of the License, or (at your option) any later version.
+-
+-This program is distributed in the hope that it will be useful,
+-but WITHOUT ANY WARRANTY; without even the implied warranty of
+-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-GNU General Public License for more details.
+-
+-You should have received a copy of the GNU General Public License
+-along with this program; if not, write to the Free Software
+-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+-*/
+-
+-//Compute the prefix path we will use
+-$basepath = $GLOBALS['basemodule_url'] . "/";
+-if($GLOBALS['gbl_relation'] != null)
+-{
+-	$basepath .= $GLOBALS['gbl_relation']->getData()->url_name . "/";
+-	if($GLOBALS['gbl_relationsubcat'] != null)
+-		$basepath .= $GLOBALS['gbl_relationsubcat']->getData()->url_name . "/";
+-}
+-if($GLOBALS['gbl_category'] != null)
+-	$basepath .= $GLOBALS['gbl_category']->getData()->url_name . "/";
+-
+-?>
+-
+-<!-- QAPoll starts here -->
+-<div class="qapoll">
+-
+-<?php if($this->view_options['page_number'] > 0 && $this->view_options['page_number'] < 6) : ?>
+-
+-
+-<div align="center">
+-
+-	<table style="text-align:center">
+-	<tr>
+-	<td style="padding-bottom:0px">
+-
+-	<?php if($this->view_options['page_number'] == 1) : ?>
+-	<b class="ubuntu_roundnavbar">
+-	<b class="ubuntu_roundnavbar1"><b></b></b>
+-	<b class="ubuntu_roundnavbar2"><b></b></b>
+-	<b class="ubuntu_roundnavbar3"></b>
+-	<b class="ubuntu_roundnavbar4"></b>
+-	<b class="ubuntu_roundnavbar5"></b></b> 
+-	<?php endif; ?>
+-
+-	</td>
+-	<td>
+-	</td>
+-	<td style="padding-bottom:0px">
+-
+-	<?php if($this->view_options['page_number'] == 2) : ?>
+-	<b class="ubuntu_roundnavbar">
+-	<b class="ubuntu_roundnavbar1"><b></b></b>
+-	<b class="ubuntu_roundnavbar2"><b></b></b>
+-	<b class="ubuntu_roundnavbar3"></b>
+-	<b class="ubuntu_roundnavbar4"></b>
+-	<b class="ubuntu_roundnavbar5"></b></b> 
+-	<?php endif; ?>
+-
+-	</td>
+-	<td>
+-	</td>
+-	<td style="padding-bottom:0px">
+-
+-	<?php if($this->view_options['page_number'] == 3) : ?>
+-	<b class="ubuntu_roundnavbar">
+-	<b class="ubuntu_roundnavbar1"><b></b></b>
+-	<b class="ubuntu_roundnavbar2"><b></b></b>
+-	<b class="ubuntu_roundnavbar3"></b>
+-	<b class="ubuntu_roundnavbar4"></b>
+-	<b class="ubuntu_roundnavbar5"></b></b> 
+-	<?php endif; ?>
+-
+-	</td>
+-	<td>
+-	</td>
+-	<td style="padding-bottom:0px">
+-
+-	<?php if($this->view_options['page_number'] == 4) : ?>
+-	<b class="ubuntu_roundnavbar">
+-	<b class="ubuntu_roundnavbar1"><b></b></b>
+-	<b class="ubuntu_roundnavbar2"><b></b></b>
+-	<b class="ubuntu_roundnavbar3"></b>
+-	<b class="ubuntu_roundnavbar4"></b>
+-	<b class="ubuntu_roundnavbar5"></b></b> 
+-	<?php endif; ?>
+-
+-	</td>
+-	<td>
+-	</td>
+-	<td style="padding-bottom:0px">
+-
+-	<?php if($this->view_options['page_number'] == 5) : ?>
+-	<b class="ubuntu_roundnavbar">
+-	<b class="ubuntu_roundnavbar1"><b></b></b>
+-	<b class="ubuntu_roundnavbar2"><b></b></b>
+-	<b class="ubuntu_roundnavbar3"></b>
+-	<b class="ubuntu_roundnavbar4"></b>
+-	<b class="ubuntu_roundnavbar5"></b></b> 
+-	<?php endif; ?>
+-
+-	</td>
+-
+-	</tr><tr>
+-
+-	<td <?php echo (($this->view_options['page_number'] == 1)?"class=\"ubuntu_roundnavbar_main\"":""); ?> style="width:100px; vertical-align:bottom; padding-bottom:4px"> 
+-	<a href="<?php echo $basepath; ?>tour/1">
+-	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-post.png" />
+-	</a>
+-	</td>
+-
+-	<td style="padding-left:15px; padding-right:15px">
+-	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-arrow.png" />
+-	</td>
+-
+-	<td <?php echo (($this->view_options['page_number'] == 2)?"class=\"ubuntu_roundnavbar_main\"":""); ?> style="width:100px; vertical-align:bottom; padding-bottom:4px">
+-	<a href="<?php echo $basepath; ?>tour/2">
+-	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-vote.png" />
+-	</a>
+-	</td>
+-
+-	<td style="padding-left:15px; padding-right:15px">
+-	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-arrow.png" />
+-	</td>
+-
+-	<td <?php echo (($this->view_options['page_number'] == 3)?"class=\"ubuntu_roundnavbar_main\"":""); ?> style="width:100px; vertical-align:bottom; padding-bottom:4px">
+-	<a href="<?php echo $basepath; ?>tour/3">
+-	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-discuss.png" />
+-	</a>
+-	</td>
+-
+-	<td style="padding-left:15px; padding-right:15px">
+-	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-arrow.png" />
+-	</td>
+-
+-	<td <?php echo (($this->view_options['page_number'] == 4)?"class=\"ubuntu_roundnavbar_main\"":""); ?> style="width:100px; vertical-align:bottom; padding-bottom:4px">
+-	<a href="<?php echo $basepath; ?>tour/4">
+-	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-see.png" />
+-	</a>
+-	</td>
+-
+-	<td style="padding-left:15px; padding-right:15px">
+-	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-arrow.png" />
+-	</td>
+-
+-	<td <?php echo (($this->view_options['page_number'] == 5)?"class=\"ubuntu_roundnavbar_main\"":""); ?> style="width:100px; vertical-align:bottom">
+-	<a href="<?php echo $basepath; ?>tour/5">
+-	<img src="<?php echo "/" . $this->getThemePath(); ?>/images/tour-participate.png" />
+-	</a>
+-	</td>
+-
+-
+-	</tr>
+-	<tr>
+-
+-	<td style="padding-top:0px">
+-
+-	<?php if($this->view_options['page_number'] == 1) : ?>
+-	<b class="ubuntu_roundnavbar">
+-	<b class="ubuntu_roundnavbar5"></b>
+-	<b class="ubuntu_roundnavbar4"></b>
+-	<b class="ubuntu_roundnavbar3"></b>
+-	<b class="ubuntu_roundnavbar2"><b></b></b>
+-	<b class="ubuntu_roundnavbar1"><b></b></b></b>
+-	<?php endif; ?>
+-
+-	</td>
+-	<td>
+-	</td>
+-	<td style="padding-top:0px">
+-
+-	<?php if($this->view_options['page_number'] == 2) : ?>
+-	<b class="ubuntu_roundnavbar">
+-	<b class="ubuntu_roundnavbar5"></b>
+-	<b class="ubuntu_roundnavbar4"></b>
+-	<b class="ubuntu_roundnavbar3"></b>
+-	<b class="ubuntu_roundnavbar2"><b></b></b>
+-	<b class="ubuntu_roundnavbar1"><b></b></b></b>
+-	<?php endif; ?>
+-
+-	</td>
+-	<td>
+-	</td>
+-	<td style="padding-top:0px">
+-
+-	<?php if($this->view_options['page_number'] == 3) : ?>
+-	<b class="ubuntu_roundnavbar">
+-	<b class="ubuntu_roundnavbar5"></b>
+-	<b class="ubuntu_roundnavbar4"></b>
+-	<b class="ubuntu_roundnavbar3"></b>
+-	<b class="ubuntu_roundnavbar2"><b></b></b>
+-	<b class="ubuntu_roundnavbar1"><b></b></b></b>
+-	<?php endif; ?>
+-
+-	</td>
+-	<td>
+-	</td>
+-	<td style="padding-top:0px">
+-
+-	<?php if($this->view_options['page_number'] == 4) : ?>
+-	<b class="ubuntu_roundnavbar">
+-	<b class="ubuntu_roundnavbar5"></b>
+-	<b class="ubuntu_roundnavbar4"></b>
+-	<b class="ubuntu_roundnavbar3"></b>
+-	<b class="ubuntu_roundnavbar2"><b></b></b>
+-	<b class="ubuntu_roundnavbar1"><b></b></b></b>
+-	<?php endif; ?>
+-
+-	</td>
+-	<td>
+-	</td>
+-	<td style="padding-top:0px">
+-
+-	<?php if($this->view_options['page_number'] == 5) : ?>
+-	<b class="ubuntu_roundnavbar">
+-	<b class="ubuntu_roundnavbar5"></b>
+-	<b class="ubuntu_roundnavbar4"></b>
+-	<b class="ubuntu_roundnavbar3"></b>
+-	<b class="ubuntu_roundnavbar2"><b></b></b>
+-	<b class="ubuntu_roundnavbar1"><b></b></b></b>
+-	<?php endif; ?>
+-
+-	</td>
+-	</tr>
+-
+-	</table>
+-
+-</div>
+-
+-<br />
+-
+-
+-<table style="width:100%">
+-<tr>
+-<td style="padding-left:30px; padding-right:30px; vertical-align:top" rowspan="2">
+-
+-<div style="border: 1px solid grey; padding:3px">
+-<div style="background-image:url(<?php echo "/" . $this->getThemePath(); ?>/images/tour-screen-<?php echo $this->view_options['page_number']; ?>.png); background-repeat:no-repeat; width:100%; height:295px">
+-
+-</div>
+-</div>
+-
+-
+-</td>
+-<td style="width:370px; vertical-align:top; padding-right:30px">
+-
+-
+-<?php if($this->view_options['page_number'] == 1) : ?>
+-<h2 style="margin-top:0px">
+-Post your idea for Ubuntu
+-</h2>
+-
+-<p>
+-Ubuntu Brainstorm is a place for people to post their ideas about Ubuntu. They can be promoted/demoted, and the most popular are reviewed by the Ubuntu developers.
+-</p>
+-
+-<p>
+-So got a great idea for Ubuntu? <a href="<?php echo $basepath; ?>submit/" target="_blank">Post it on Ubuntu Brainstorm!</a>
+-</p>
+-
+-
+-<br />
+-<br />
+-
+-<?php elseif($this->view_options['page_number'] == 2) : ?>
+-<h2 style="margin-top:0px">
+-Vote for the ideas you like
+-</h2>
+-
+-<p>
+-Show your support for the best ideas: promote or demote them by clicking on the green and red arrows!
+-</p>
+-
+-<p>
+-By voting in Ubuntu Brainstorm, you show your support for what you feel is important to Ubuntu. With enough support ideas can an impact on the future of Ubuntu.
+-</p>
+-
+-<p>
+-Check back regularly for new ideas and don't miss the most popular ones!
+-</p>
+-
+-<br />
+-<br />
+-
+-<?php elseif($this->view_options['page_number'] == 3) : ?>
+-
+-<h2 style="margin-top:0px">
+-Discuss with the community
+-</h2>
+-
+-<p>
+-Brainstorm better ideas! Leave constructive comments, links to relevant ubuntuforums.org threads, and if you have the necessary skills, start writing a blueprint. (<a href="https://wiki.ubuntu.com/FeatureSpecifications" target="_blank">What is a blueprint?</a>)
+-</p>
+-
+-<br />
+-<br />
+-
+-<?php elseif($this->view_options['page_number'] == 4) : ?>
+-
+-<h2 style="margin-top:0px">
+-See what's going on
+-</h2>
+-
+-<p>
+-Ubuntu Brainstorm is read regularly by Ubuntu developers and contributors. They are doing their best to keep you up-to-date on the most popular ideas. To see what's going on, keep an eye on:
+-</p>
+-
+-<ul>
+-<li>
+-The <a href="<?php echo $basepath; ?>ideas_in_development/" target="_blank">ideas in development</a> and <a href="<?php echo $basepath; ?>implemented_ideas/" target="_blank">implemented ideas</a> pages in Ubuntu Brainstorm.
+-</li>
+-<li>
+-The <a href="http://blog.qa.ubuntu.com/" target="_blank">Ubuntu QA blog</a>, where developers' comments on ideas and Brainstorm news are regularly posted.
+-</li>
+-<li>
+-<a href="http://planet.ubuntu.com/" target="_blank">Planet Ubuntu</a> where all the Ubuntu developer's blogs are aggregated.
+-</li>
+-<li>
+-The <a href="http://fridge.ubuntu.com/" target="_blank">Ubuntu "Fridge"</a> where regular Ubuntu news are posted.
+-</li>
+-</ul>
+-<br />
+-
+-<?php elseif($this->view_options['page_number'] == 5) : ?>
+-
+-<h2 style="margin-top:0px">
+-Participate to the development of ideas
+-</h2>
+-
+-<p>
+-There are plenty of great ideas out there, but not enough contributors to implement them. Your participation can make the difference!
+-</p>
+-
+-<p>
+-If you are willing to start working on an idea, don't hesitate, just do it! Make contact with the relevant <a href="http://www.ubuntu.com/community/participate" target="_blank">Ubuntu team</a>. Discuss how to approach the project, and get started!
+-</p>
+-
+-<p>
+-Not a programmer? No problem! Lots of tasks do not require programming knowledge, for example <a href="https://wiki.ubuntu.com/TranslatingUbuntu" target="_blank">translation</a>, <a href="https://wiki.ubuntu.com/DocumentationTeam" target="_blank">documentation</a>, <a href="https://wiki.ubuntu.com/Artwork" target="_blank">artwork</a>, <a href="https://wiki.ubuntu.com/HelpingWithBugs" target="_blank">bug triaging</a>, ...
+-<a href="http://www.ubuntu.com/community/participate" target="_blank">Find out more</a> about contributing to Ubuntu and working with Ubuntu teams.
+-</p>
+-
+-<br />
+-
+-<?php endif; ?>
+-
+-
+-
+-
+-</td>
+-</tr>
+-
+-
+-<tr>
+-<td style="vertical-align:bottom">
+-
+-<table style="width:100%">
+-<tr>
+-<td>
+-</td>
+-<td style="width:1%">
+-
+-	<b class="postbutton">
+-	<b class="postbutton1"><b></b></b>
+-	<b class="postbutton2"><b></b></b>
+-	<b class="postbutton3"></b>
+-	<b class="postbutton4"></b>
+-	<b class="postbutton5"></b></b>
+-	<div class="postbutton_main" style="padding-left:15px; padding-right:15px">
+-
+-	<?php if($this->view_options['page_number'] < 5) : ?>
+-	<a href="<?php echo $basepath; ?>tour/<?php echo $this->view_options['page_number'] + 1; ?>" class="blacklink2" style="font-size:17px; padding-left:2px; white-space:nowrap">
+-	Next &raquo;
+-	</a>
+-	<?php else : ?>
+-	<a href="<?php echo $GLOBALS['basemodule_url']; ?>/user/register" class="blacklink2" style="font-size:17px; padding-left:2px; white-space:nowrap">
+-	Join Ubuntu Brainstorm Now!
+-	</a>
+-	<?php endif; ?>
+-
+-	</div>
+-	<b class="postbutton">
+-	<b class="postbutton5"></b>
+-	<b class="postbutton4"></b>
+-	<b class="postbutton3"></b>
+-	<b class="postbutton2"><b></b></b>
+-	<b class="postbutton1"><b></b></b></b>
+-
+-</td>
+-</tr>
+-</table>
+-
+-</td>
+-</tr>
+-</table>
+-
+-
+-<?php endif; ?>
+-
+-
+-</div>
+-<!-- QAPoll ends here -->

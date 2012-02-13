@@ -1,0 +1,5 @@
+name = IdeaTorrent
+description = "IdeaTorrent Open Innovation module"
+dependencies = qawebsite
+package = Zebra
+version = 0.9

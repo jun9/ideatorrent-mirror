@@ -1,0 +1,60 @@
+@import "drupal.css";
+@import "common.css";
+@import "layout.css";
+@import "qa.css";
+
+
+/* Fix broken IE behaviour with legend */
+legend {
+    color:#000000;
+}
+
+body {
+	background-image: url(images/bgrepeat.jpg);
+	background-color: #D3CAAA;
+	background-repeat: repeat-x;
+	padding: 0;
+	margin: 0;
+}
+
+/* override a setting in drupal that makes editing difficult */
+.node-form .standard {
+	clear: none;
+}
+
+/* styles for homepage */
+#homepageheader a {
+	text-decoration: none;
+	color: #5A3320;
+}
+.frontpage h2, .frontpage h3 {
+	margin-top: 0 !important;
+}
+#newsbox-homepage {
+	position: relative;
+	width: 195px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+#newsbox-homepage-top {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 195px;
+	height: 10px;
+	background-image: url(images/newsbox-top.png);
+	background-repeat: no-repeat;
+}
+#newsbox-homepage-bottom {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 195px;
+	height: 10px;
+	background-image: url(images/newsbox-bottom.png);
+	background-repeat: no-repeat;
+}
+#newsbox-homepage p, #newsbox-homepage h3 {
+	padding-left: 15px;
+	padding-right: 15px;
+}

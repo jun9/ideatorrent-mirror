@@ -1,0 +1,4 @@
+name = QA-Website
+description = "Ubuntu Quality Assurance Website"
+package = Ubuntu
+version = r35

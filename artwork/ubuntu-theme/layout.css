@@ -1,0 +1,161 @@
+@import "pageheader.css"; /* separate files for improved readability */
+@import "navigation.css";
+@import "qa.css";
+
+#container {
+	margin: 0 4%;
+	padding: 0 0 0 14px;
+	position: relative;
+	background-color: #fff;
+	background-image: url(images/page-border-left-repeat.jpg);
+	background-repeat: repeat-y;
+	background-position: left;
+
+}
+#content {
+	margin: 0; 
+	padding: 0 13px 0 0;
+	min-height: 665px;
+	position: relative;
+	background-color: #fff;
+	background-image: url(images/page-border-right-repeat.jpg);
+	background-repeat: repeat-y;
+	background-position: right;
+
+}
+
+ul {
+	list-style-position: inside;
+	padding-left:5px;
+}
+
+#topNav {
+	background-image: url(images/top.jpg);
+	background-repeat: repeat-x;
+	background-position: top;
+	padding-top: 18px;
+	z-index: 1;
+}
+#bg-left {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 14px;
+	height: 665px;
+	background-image: url(images/page-border-left.jpg);
+	background-repeat: no-repeat;
+	background-position: top left;
+	z-index: 6;
+}
+#bg-right {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 13px;
+	height: 665px;
+	background-image: url(images/page-border-right.jpg);
+	background-repeat: no-repeat;
+	background-position: top right;
+	z-index: 6;
+}
+#bottom-left {
+	width: 14px;
+	height: 34px;
+	background-image: url(images/footerbg-left.jpg);
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	z-index: 7;
+}
+#bottom-right {
+	width: 13px;
+	height: 34px;
+	background-image: url(images/footerbg-right.jpg);
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	z-index: 7;
+}
+/* bodyouter provides the borders for the left navigation */
+/* see http://webhost.bridgew.edu/etribou/layouts/skidoo_too/ */
+#bodyouter {
+	position: relative;
+	overflow: hidden;
+	margin: 0 0;
+	padding-left: 205px;
+	min-height: 500px;
+}
+#bodyouter-noleftblock {
+	position: relative;
+	overflow: hidden;
+	margin: 0 0;
+	min-height: 500px;
+}
+
+* html #bodyouter {
+	height: 1%;
+}
+#leftsidebar {
+	width: 205px;
+	width: 205px;
+	float: right;
+	margin-left: -205px;
+}
+
+#rightsidebar {
+	width: 205px;
+}
+
+#bodyinner {
+	width: 100%;
+	border-left: 205px solid white;
+	margin-left: -205px;
+	float: right;
+}
+#bodyinner-noleftblock {
+	width: 100%;
+	float: right;
+}
+
+#contentpadding {
+	padding-left: 20px;
+}
+/* end body/content region */
+/* begin footer */
+#footer {
+	background-image: url(images/footerbg.jpg);
+	background-repeat: repeat-x;
+	background-position: bottom;
+	padding: 0 0 0 0;
+}
+#footer .wrapper {
+	padding: 0 15px 5px 15px;
+	color: #656565;
+	font-size: 70%;
+	position: relative;
+}
+#footer .wrapper a {
+	color: #656565;
+	text-decoration: none;
+}
+#footer .wrapper p {
+	width: 70%;
+	float: left;
+	font-size: 90%;
+}
+#footer .wrapper ul {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 1.3em;
+}
+#footer .wrapper li {
+	display: block;
+	float: left;
+	padding: 0 10px;
+	font-weight: bold;
+}
+#footer .wrapper li.last {
+	border-right-style: none;
+	padding-right: 0;
+}

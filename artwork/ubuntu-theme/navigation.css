@@ -1,0 +1,137 @@
+/* navigation
+ *
+*/
+#breadcrumb {
+	font-size: 80%;
+	border-bottom: 1px dotted #656565;
+}
+#breadcrumb h3 {
+	font-size: 90%;
+	color: #DB0800;
+	display: inline;
+	padding-right: 1em;
+}
+.block h2.title {
+	font-size: 100%;
+	padding: .4em;
+	margin: 0;
+	color: #DB0800;
+}
+span.taxonomy {
+        display: none;
+}
+/* both left and right side menus */
+ul.menu {
+	font-size: 80%;
+	padding: 0 0 0 .2em;
+	margin-left:0px;
+}
+ul.menu li {
+	display: block;
+	text-indent: 17px;
+	padding: 0;
+	margin: 0;
+	line-height: 1.5em;
+	list-style: none;
+}
+ul.menu a {
+	color: #474747;
+	display: block;
+	width: 100%;
+	text-decoration: none;
+	padding: .2em 0;
+}
+ul.menu a:active, ul.menu a.active {
+	color: #D20000;
+}
+/* right side menu only */
+#rightsidebar div.block {
+	padding-left: 12px;
+	font-size: 80%;
+}
+
+/* left side menu only */
+#leftsidebar ul.menu li {
+	text-indent: 0px;
+	line-height: auto;
+}
+#leftsidebar ul.menu a {
+	text-indent: 19px;
+	font-size:small;
+	font-weight: normal;
+	background:url(/modules/qawebsite/images/action.png) 8px center no-repeat;
+	padding-bottom: 2px;
+	padding-top: 2px;
+}
+#leftsidebar ul.menu li.expanded ul {
+	padding: 0;
+}
+#leftsidebar ul.menu li.expanded li {
+	background-color: #F0EEEB;
+	background-position: 1.3em .7em;
+	font-size: 110%;
+	text-indent: 2.4em;
+}
+#leftsidebar ul.menu li.expanded li ul {
+	padding-left: 1.5em;
+}
+#leftsidebar ul.menu li.expanded li ul li {
+	background-image: none;
+}
+#leftsidebar ul.menu li.expanded li a {
+	border-bottom-style: none;
+}
+#leftsidebar ul.menu ul.menu li.expanded {
+	border-bottom-style: none;
+}
+#hotlinks_fancy {
+	margin: 1em 0;
+	font-size: 80%;
+}
+#hotlinks_fancy div {
+	margin-bottom: 1em;
+	position: relative;
+	background-image: url(images/feature-button-bg.jpg);
+	background-repeat: no-repeat;
+	background-position: bottom right; 
+	border-top: 1px solid white; /* needed to make ie6 behave */
+}
+#hotlinks_fancy div a {
+	color: #BD0901;
+	display: block;
+	margin-left: 52px;
+	text-decoration: none;
+}
+#hotlinks_fancy div img {
+	border-style: none;
+	position: absolute;
+	top: 0;
+	left: 4px;
+}
+#hotlinks_fancy div p {
+	margin: .5em 0 0 52px;
+	font-size: 90%;
+	padding-bottom: 1em;
+}
+#hotlinks_fancy div p a {
+	display: inline;
+	margin: 0;
+}
+#hotlinks {
+	margin: 2em 0;
+	font-size: 80%;
+}
+#hotlinks div {
+	margin-bottom: 1em;
+	position: relative;
+	border-top: 1px solid white; /* needed to make ie6 behave */
+}
+#hotlinks div a {
+	color: #BD0901;
+	text-decoration: none;
+}
+#hotlinks div img {
+	border-style: none;
+	vertical-align: middle;
+}
+/* end navigation */

@@ -1,0 +1,111 @@
+/* 
+ * classes used throughout the site and template
+*/
+.rule {
+	margin: 0 auto;
+	clear: both;
+}
+img.rule {
+	width: 100%;
+}
+.clear {
+	clear: both;
+}
+.mnemonic {
+	text-decoration: underline;
+}
+.highlight {
+	color: #5A3320;
+}
+.commandprompt {
+	font-family: monospace;
+	white-space: pre;
+	display: block;
+	background-color: #e8e8e8;
+	border: 1px solid #ccc;
+}
+.quote {
+	display: block;
+	color: #333;
+}
+.redhighlight {
+/* 	color: #D90D19 !important;
+	text-decoration: none;
+	font-size: 90%; */
+}
+.blackhighlight {
+	color: #000 !important;
+	text-decoration: none;
+}
+.brownhighlight {
+	color: #5A3320 !important;
+	text-decoration: none;
+}
+.graybg {
+	background-color: #f6f5f0;
+}
+.noundies {
+	text-decoration: none;
+}
+.small {
+	font-size: 90%;
+}
+.tiny {
+	font-size: 80%;
+}
+
+.affiliate {
+	margin: 10px 30px 20px 60px; 
+	border-left: 10px solid red; 
+	background-color: white;
+	font-size: 100%;
+	padding: 10px 5px;
+	line-height: 1.3em;
+}
+
+.gold_cell {
+	border: 0px solid black;
+	padding-left: 15px;
+}
+
+.partner_cell {
+	border: 0px solid black;
+	padding-left: 15px;
+}
+
+.affiliate_cell {
+	border: 0px solid black; 
+	padding-left: 15px;
+}
+/* end partner page styles */
+body {
+	font-family: Tahoma, Sans, Arial, Helvetica, sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-family: "Trebuchet MS", "Trebuchet", "Nimbus Sans L", sans-serif;
+	color: #5A3320;
+	margin: 1em 0 .3em;
+}
+p {
+	margin: 1em 0 .3em;
+}
+#bodyinner, #bodyinner-noleftblock {
+	font-size: 80%;
+}
+
+a {
+	color: #D90D19;
+}
+a:visited {
+	color: #D90D19;
+}
+button {
+	cursor: pointer;
+}
+.usn {
+	background-color: #eee;
+	padding: 0.75em 1.5em;
+	border: 1px solid #ddd;
+	font-family: monospace;
+	white-space: pre;
+}

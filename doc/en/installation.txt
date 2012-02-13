@@ -1,0 +1,63 @@
+================================
+ IdeaTorrent installation guide
+================================
+
+.. contents:: Table of Contents
+
+Requirements
+============
+The following pieces of software are required for IdeaTorrent to function:
+
+* A webserver with PHP5
+* PostgreSQL **8.3**
+* Drupal **5.x**
+
+Setting up
+==========
+
+Install the requirements
+------------------------
+
+Install your webserver and PHP5. Install PostgreSQL (`See Ubuntu doc <https://help.ubuntu.com/community/PostgreSQL>`__) and its PHP5 module. Download and install `Drupal 5.x <http://drupal.org/>`__ (`See Drupal doc <http://drupal.org/getting-started/5/install>`__).
+
+Install IdeaTorrent
+-------------------
+Download IdeaTorrent from http://www.ideatorrent.org/download. Extract the tarball into the /path/to/your/drupal/modules/, usually /var/www/modules. You will have two new directories : *qawebsite* and *ideatorrent*.
+
+Go to the Drupal module administration page (http://your.url/?q=admin/build/modules or http://your.url/admin/build/modules with `clean URLs <http://drupal.org/node/15365>`__ enabled), enable the *qawebsite* module and validate. Then enable the *ideatorrent* module and validate. (DON'T do it both at the same time. I'll need to fix that.) Et voilà! You can access IdeaTorrent at http://your.url/?q=ideatorrent or http://your.url/ideatorrent with `clean URLs <http://drupal.org/node/15365>`__ enabled. But behold! You should now configure it.
+
+Configuring IdeaTorrent
+=======================
+
+Enabling the clean URLs
+-----------------------
+At the moment, IdeaTorrent is not known to work without the `clean URLs <http://drupal.org/node/15365>`__ feature of Drupal. So you should enable it : go to http://your.url/?q=admin/settings/clean-urls. Normally, the "Disabled" and "Enabled" options should be greyed. The trick is to click on the small link on the text below. Once clicked, the options should now be enabled. (Note: if you get a 'page not found' error, you'll need to change your Apache config, see `the Drupal doc <http://drupal.org/node/15365>`__.) Select "Enable", and voila, IdeaTorrent should be accessible via http://your.url/ideatorrent/.
+
+IdeaTorrent permissions
+-----------------------
+IdeaTorrent have four kind of permissions:
+
+* Ideatorrent user permissions : These contains the basic user permissions: post an idea, a solution and a comment, edit its own content.
+* Ideatorrent moderator permissions : A moderator has lots of power : edition/deletion of all content, ability to moderate ideas before insertion, process the reports (duplicates, spam,...), set the status of idea.
+* Ideatorrent developer permissions : A developer can edit the Developer comments field of an idea, and select the solutions used by ideas in development/implemented ideas.
+* Ideatorrent admin permissions : All the possible permissions.
+
+By default, Drupal does not know who to assign these permissions. So with a basic install, you can't even post ideas. To do that, you'll need to create four new roles in Drupal (or use existing ones, your choice) in http://your.url/admin/user/roles and edit them: You will be able to assign to these roles the IdeaTorrent and QAWebsite permissions. Note that the permissions described earlier are split into the QAWebsite and IdeaTorrent module. So if you want to assign to a role the IdeaTorrent moderator permission, you will have to check *Ideatorrent moderator permissions (1/2)* and *Ideatorrent moderator permissions (1/2)*. 
+
+Now you can affect these Drupal roles to users. Go to a user page (e.g. http://your.url/user/1 for the first user), click on the Edit tab, and select one of the roles you just created!
+
+IdeaTorrent block
+-----------------
+Ok, at this point, you should have IdeaTorrent accesible at http://your.url/ideatorrent/. But the widgets are the right ("Search", "Submit your idea", "My dashboard") are missing. To add them, go to http://your.url/admin/build/block, and put the "QA-Website module action block 2" on the right(preferred) or left sidebar of your theme. That should be it!
+
+Optionnally you can remove the "Navigation" and "Primary links" block to hide the Drupal menu. But in this case, you will have to remember the links to login and access the admin panel!
+
+Making IdeaTorrent the default module
+-------------------------------------
+Right now, IdeaTorrent is accessible at http://your.url/ideatorrent/. We now want to make it accessible from http://your.url/. To do this, go to http://your.url/admin/settings/site-information, and in the last "Default front page" option, put "ideatorrent". Et voilà!
+
+Configuring IdeaTorrent itself
+------------------------------
+As a IdeaTorrent admin, you can access the IdeaTorrent administration panel at http://your.url/ideatorrent/ideatorrent_admin/.
+
+

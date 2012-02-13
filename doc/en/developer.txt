@@ -1,0 +1,107 @@
+============================
+ IdeaTorrent developer guide
+============================
+
+.. contents:: Table of Contents
+
+Setting up the development environment
+======================================
+Use the instructions found in installation guide to install IdeaTorrent, except that instead of downloading a source code tarball of IdeaTorrent, you should download the bazaar repository, using the following command::
+
+	bzr branch lp:ideatorrent
+
+Once the branch is downloaded, you should make the following symbolic links::
+
+	ln -s /path/to/the/branch/modules/ideatorrent /path/to/your/drupal/installation/modules/ideatorrent
+	ln -s /path/to/the/branch/modules/qawebsite /path/to/your/drupal/installation/modules/qawebsite
+	ln -s /path/to/the/branch/artwork/ubuntu-theme /path/to/your/drupal/installation/themes/ubuntu-theme
+
+Once done, you can follow the rest of the installation instructions.
+
+Working on IdeaTorrent
+======================
+IdeaTorrent is using the Bazaar VCS. You can find a small introduction `here <http://doc.bazaar-vcs.org/bzr.dev/en/mini-tutorial/index.html>`__ and some more various documentation `here <http://bazaar-vcs.org/Documentation>`__.
+
+Update the code to the latest version
+---------------------------------------
+To update your local copy to the latest version, use the following command:
+
+	bzr merge lp:ideatorrent
+
+Working on the code and making a patch
+--------------------------------------
+You can start working on your own branch, and optionally host it on `Launchpad <https://code.launchpad.net/ideatorrent>`__. You can also commit your changes to your local branches, like you would do with a centralized VCS. Finally, once you think you code is ready, create a `bundle <https://code.launchpad.net/ideatorrent>`__ (enhanced patch) by typing::
+
+	bzr bundle > your-bundle-name.bundle
+
+You can then submit it as a patch to the `development mailing list <http://lists.ideatorrent.org/cgi-bin/mailman/listinfo/devel>`__. It will be reviewed and hopefully included in the main development branch.
+
+
+Code Conventions & API
+======================
+The IdeaTorrent code follows some conventions, please try to follow them.
+
+MVC model
+---------
+The code follow a classic MVC model: models are localed in /models, views in /views (themes in themes/) and the controller is in controller.php. One or more models can be assigned to a view. The basic code to display a page is::
+
+	$model = new ChoiceListModel();
+	$model->setFilterParameters(array("user" => ..., "ordering" => "new"));
+	$view = new ChoiceListView();
+	$view->setOptions(array("show_latest_comments_data" => 1));
+	$view->setModel($model, "choicelist");
+	$content = $view->display("popular_ideas");
+
+Models
+------
+For each database object, there are generally two related class: YourmodelnameModel and YourmodelnameListModel. YourmodelnameModel contains data loading and saving functions for only one instance, YourmodelnameListModel contains data loading functions for several instances.
+
+Model
+~~~~~
+The id of a model is set by *setId()*. Data can be loaded using *getData()*, which call *_loadData()* and store it. *setDataFilter()* can be called before to limit the fetched data (and thus the SQL processing time) if you only need some specific bits of data.
+
+ListModel
+~~~~~~~~~
+The filter can be set using *setFilterParameters()*. It was written so that it could take the $_GET array as parameters : parameters are thus sanitized inside it. *setDataFilter()* can be called before to limit the fetched data (and thus the SQL processing time) if you only need some specific bits of data.
+
+Views
+-----
+A view is a very basic class. We can affect some models to it with *setModel()*, give it some theme-wide options with *setOptions()*, and finally call the rendering function with *display($template_name)*. A template is a piece of HTML and PHP that will be used to render some models. Three parameters are given to a template : an array of models, an array of data (the data that the models return), and an array of options. See the following function::
+
+	protected function loadTemplate($path, $template, $prefix = "", $data = array(), $models = array(), $options = array())
+
+Themes
+------
+IdeaTorrent has a theming function: you can place different themes in the themes/ directory, and choose one via the admin panel. A theme is made of templates, and a theme.php file, which returns the default theme options and indicate which JS/CSS files to load with which template.
+Some templates does not need to be themed, e.g. the data views (JSON, RSS) and some HTML views (admin panels). In this case, the following function is called::
+
+	protected function loadNonThemedTemplate($path, $template, $prefix = "", $data = array(), $models = array(), $options = array())
+
+Permission handling
+-------------------
+There is two way to handle the permission: the old, not recommended way, and the new way. 
+
+The new way of the jedi
+~~~~~~~~~~~~~~~~~~~~~~~
+The new way is the following function::
+
+	UserModel::currentUserHasPermission($perm_name, $subsystem = "", $instance_listmodel = null, $model_id = -1)
+
+$perm_name is the permission to check. $subsystem is the name of the permission namespace (e.g. "Choice"). The third argument can be a Model or a ListModel, and if it is a ListModel, the fourth argument is a model id. What is the use of the 2,3 and 4th argument? Well, the current implementation allow "filtered permission" e.g. this user can only edit the idea of the project Amarok. So in order to check the user permission against a model, you will need to give either the Model or the (ListModel, item id) couple. Some examples::
+
+	UserModel::currentUserHasPermission("delete_user_items", "User")
+	UserModel::currentUserHasPermission("approve_idea", "Choice", $choicemodel)
+	UserModel::currentUserHasPermission("mark_dup", "Choice", $models["itemlist"], $data["item"]->id)
+
+Permissions of the ideatorrent module (permissions seen under the "IdeaTorrent" name in the Drupal administration pages) are defined in the qapoll_permission table. I strongly recommand you to read its description on ideatorrent.install if you intend to add/modify a permission. At the moment, for convenience, the unserialized permissions array are stored and commented in the user/default.php template.
+	
+The old unrecommended way of the jedi
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Before the new implementation, there was four hardcoded roles, still available under the "QAWebsite" name in the Drupal administration pages::
+
+	user_access($site->getData()->userrole)
+	user_access($site->getData()->moderatorrole)
+	user_access($site->getData()->developerrole)
+	user_access($site->getData()->adminrole)
+
+The cons are the hardcoded part, and the impossibility to filter the permissions.

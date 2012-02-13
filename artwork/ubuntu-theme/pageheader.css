@@ -1,0 +1,96 @@
+/* top navigation section
+ *  
+*/
+#topNav {
+	width: 100%;
+	position: relative;
+	font-size: small;
+}
+#topNav a {
+	color: #000000;
+	text-decoration: none;
+	font-size: small;
+	border-bottom: 1px dotted #fff;
+}
+
+#topNav a:hover {
+	color: red;
+}
+
+#topNav b {
+	color: #000000;
+	font-size: small;
+	border-bottom: 1px dotted #fff;
+}
+
+#topNav li a:hover {
+	border-bottom: 1px dotted #656565;
+}
+#topNav ul {
+	display: block;
+	margin: 0;
+	padding: 0 0px .5em 0px;
+	position: absolute;
+	top: 20px;
+	right: 0px;
+	max-width:80%;
+	border-bottom: 1px solid #000000;
+	z-index: 9;
+}
+#topNav ul ul {
+	padding-bottom: 0;
+}
+#topNav li {
+	display: block;
+	float: left;
+	margin: 0 18px 0 0;
+	text-indent: 13px;
+	padding-bottom: 0;
+	line-height: 1.1em;
+	position: relative;
+}
+#topNav li.last {
+	margin: 0;
+}
+#topNav li ul {
+	position: absolute;
+	background-color: #fff;
+	border: 1px solid #D3CAAA;
+	width: 10em;
+	left: -999em;
+	top: 1.1em;
+	z-index: 100;
+	font-size: 90%;
+}
+#topNav li:hover ul {
+	left: 0;
+	z-index: 1000;
+}
+#topNav li ul li {
+	background-image: none;
+	text-indent: 0;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
+#topNav li ul li a {
+	display: block;
+	width: 100%;
+	padding: .2em 0;
+	text-indent: .2em;
+}
+#topNav li ul li a:hover,#topNav li ul li a:active {
+	color: white;
+	background-color: #D3CAAA;
+}
+#topNav img {
+	margin: 0;
+	padding: 0;
+	border-style: none;
+}
+#topNav img.rule {
+	border-top: 1.7em solid white;
+	/* ugly, ugly, but the line is too close to the tabs w/out it
+	   using ems means this lowers as the users font-size increases */
+}
+/* end top navigation */
